@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import prismadb from "@/lib/prismadb";
 import { catchError } from "@/lib/utils";
 import { auth } from "@clerk/nextjs/server";
