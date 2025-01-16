@@ -1,3 +1,4 @@
+import TaskSummaryDashboard from "@/components/dashboatd";
 import { Fragment } from "react";
 const RootPage = () => {
   return (
@@ -10,6 +11,7 @@ const RootPage = () => {
         >
          Dashboard
         </h1>
+        <TaskSummaryDashboard/>
       </div>
     </Fragment>
   );

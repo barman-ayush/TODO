@@ -43,15 +43,15 @@ export function AddTaskDialog({ onAddTask }: AddTaskDialogProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // console.log(e);
+    console.log("Sent")
     
     const newTask = {
-      id: Math.random().toString(36).substr(2, 9),
       title,
       priority: parseInt(priority),
       status: status ? "Finished" : "Pending",
       startTime: startDate ? format(startDate, "dd-MMM-yy hh:mm a") : "",
       endTime: endDate ? format(endDate, "dd-MMM-yy hh:mm a") : "",
-      totalTime: 0, // You might want to calculate this based on start and end time
     };
 
     onAddTask(newTask);

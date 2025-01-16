@@ -36,38 +36,58 @@ interface EditTaskDialogProps {
   onUpdateTask: (taskId: number, updatedTask: Partial<Task>) => void;
 }
 
-export function EditTaskDialog({ task, open, onOpenChange, onUpdateTask }: EditTaskDialogProps) {
+export function EditTaskDialog({
+  task,
+  open,
+  onOpenChange,
+  onUpdateTask,
+}: EditTaskDialogProps) {
   const [title, setTitle] = React.useState(task.title);
   const [priority, setPriority] = React.useState(task.priority.toString());
-  const [status, setStatus] = React.useState(task.status === "Finished");
+  const [status, setStatus] = React.useState(task.status === "finished");
   const [startDate, setStartDate] = React.useState<Date | undefined>(
     task.startTime ? new Date(task.startTime) : undefined
   );
   const [endDate, setEndDate] = React.useState<Date | undefined>(
     task.endTime ? new Date(task.endTime) : undefined
   );
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     setTitle(task.title);
     setPriority(task.priority.toString());
-    setStatus(task.status === "Finished");
+    setStatus(task.status === "finished");
     setStartDate(task.startTime ? new Date(task.startTime) : undefined);
     setEndDate(task.endTime ? new Date(task.endTime) : undefined);
+    setError(null);
   }, [task]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    const updatedTask: Partial<Task> = {
-      title,
-      priority: parseInt(priority),
-      status: status ? "Finished" : "Pending" as const,
-      startTime: startDate ? format(startDate, "dd-MMM-yy hh:mm a") : "",
-      endTime: endDate ? format(endDate, "dd-MMM-yy hh:mm a") : "",
-    };
+    setIsSubmitting(true);
+    setError(null);
 
-    onUpdateTask(task.id, updatedTask);
-    onOpenChange(false);
+    try {
+      if (!startDate || !endDate) {
+        throw new Error("Please select both start and end dates");
+      }
+
+      const updatedTask: Partial<Task> = {
+        title,
+        priority: parseInt(priority),
+        status: status ? "finished" : "pending",
+        startTime: startDate ? format(startDate, "yyyy-MM-dd'T'HH:mm:ss") : "",
+        endTime: endDate ? format(endDate, "yyyy-MM-dd'T'HH:mm:ss") : "",
+      };
+      console.log("Task ID" , task.id)
+      await onUpdateTask(task.id, updatedTask);
+      onOpenChange(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to update task");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -80,6 +100,7 @@ export function EditTaskDialog({ task, open, onOpenChange, onUpdateTask }: EditT
           </div>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4 py-4">
+          {error && <div className="text-red-500 text-sm">{error}</div>}
           <div className="space-y-2">
             <Label htmlFor="title">Title</Label>
             <Input
@@ -88,7 +109,7 @@ export function EditTaskDialog({ task, open, onOpenChange, onUpdateTask }: EditT
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
-          
+
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Priority</Label>
@@ -105,15 +126,12 @@ export function EditTaskDialog({ task, open, onOpenChange, onUpdateTask }: EditT
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div className="space-y-2">
               <Label>Status</Label>
               <div className="flex items-center space-x-2 pt-2">
                 <Label>Pending</Label>
-                <Switch
-                  checked={status}
-                  onCheckedChange={setStatus}
-                />
+                <Switch checked={status} onCheckedChange={setStatus} />
                 <Label>Finished</Label>
               </div>
             </div>
@@ -132,7 +150,11 @@ export function EditTaskDialog({ task, open, onOpenChange, onUpdateTask }: EditT
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {startDate ? format(startDate, "PPP") : <span>Pick a date</span>}
+                    {startDate ? (
+                      format(startDate, "PPP")
+                    ) : (
+                      <span>Pick a date</span>
+                    )}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
@@ -157,7 +179,11 @@ export function EditTaskDialog({ task, open, onOpenChange, onUpdateTask }: EditT
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {endDate ? format(endDate, "PPP") : <span>Pick a date</span>}
+                    {endDate ? (
+                      format(endDate, "PPP")
+                    ) : (
+                      <span>Pick a date</span>
+                    )}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
@@ -176,11 +202,16 @@ export function EditTaskDialog({ task, open, onOpenChange, onUpdateTask }: EditT
               type="button" 
               variant="outline" 
               onClick={() => onOpenChange(false)}
+              disabled={isSubmitting}
             >
               Cancel
             </Button>
-            <Button type="submit" className="bg-purple-600 hover:bg-purple-700">
-              Update
+            <Button 
+              type="submit" 
+              className="bg-purple-600 hover:bg-purple-700"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Updating..." : "Update"}
             </Button>
           </div>
         </form>
