@@ -1,3 +1,4 @@
+// eslint-disable @typescript-eslint/no-explicit-any
 "use client";
 
 import { AddTaskDialog } from "@/components/add-task";
@@ -5,7 +6,7 @@ import { TaskTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 import { Fragment } from "react";
 
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const TaskList = () => {
   const handleAddTask = (newTask: any) => {
     // Here you would typically update your state or make an API call

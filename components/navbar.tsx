@@ -1,13 +1,9 @@
 "use client";
 
-import { Sparkles } from "lucide-react";
 import React from "react";
 import Link from "next/link";
 import {
-  SignInButton,
-  SignOutButton,
   SignedIn,
-  SignedOut,
   UserButton
 } from "@clerk/nextjs";
 

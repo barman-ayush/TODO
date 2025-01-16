@@ -232,7 +232,7 @@ export function TaskTable() {
   
     // Apply time-based sorting
     const sortedData = React.useMemo(() => {
-      let result = [...tasks];
+      const result = [...tasks];
   
       if (timeSort) {
         result.sort((a, b) => {
