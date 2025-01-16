@@ -44,7 +44,6 @@ export function AddTaskDialog({ onAddTask }: AddTaskDialogProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // console.log(e);
     console.log("Sent")
     
     const newTask = {

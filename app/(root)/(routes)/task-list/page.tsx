@@ -18,8 +18,6 @@ const TaskList = () => {
     }catch(e){
       console.log(e);
     }
-    // Here you would typically update your state or make an API call
-    // Update your task list accordingly
   };
 
   return (
