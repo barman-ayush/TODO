@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-// Define interfaces for the data structure
 interface PriorityBreakdown {
   priority: number;
   pendingTasks: number;
@@ -55,7 +54,6 @@ const TaskSummaryDashboard = () => {
 
   return (
     <div className="space-y-8">
-      {/* Overall Summary */}
       <Card>
         <CardHeader>
           <CardTitle>Summary</CardTitle>
@@ -80,7 +78,6 @@ const TaskSummaryDashboard = () => {
         </CardContent>
       </Card>
 
-      {/* Pending Tasks Summary */}
       <Card>
         <CardHeader>
           <CardTitle>Pending task summary</CardTitle>
@@ -101,7 +98,6 @@ const TaskSummaryDashboard = () => {
         </CardContent>
       </Card>
 
-      {/* Priority Table */}
       <Card>
         <CardHeader>
           <CardTitle>Task Priority Breakdown</CardTitle>

@@ -11,7 +11,7 @@ export async function GET(req:Request) {
         console.log("HIT")
         const userId = (await auth())?.userId;
         if(!userId) return new NextResponse("Unauthorized" , {status : 401});
-        const response = await prismadb.task.findMany();
+        const response = await prismadb.task.findMany({where : {userId : userId}});
         console.log(response);
         return NextResponse.json(response , {status : 200})
     }catch(e  :any){

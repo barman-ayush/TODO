@@ -19,7 +19,6 @@ export async function POST(req: Request) {
       return new NextResponse("Task IDs are required", { status: 400 });
     }
 
-    // Verify all tasks belong to the user
     const tasks = await prismadb.task.findMany({
       where: {
         id: { 
@@ -33,7 +32,6 @@ export async function POST(req: Request) {
       return new NextResponse("Unauthorized: Some tasks don't belong to the user", { status: 403 });
     }
 
-    // If verification passes, delete the tasks
     const deletedTasks = await prismadb.task.deleteMany({
       where: {
         id: { 

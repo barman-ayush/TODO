@@ -29,12 +29,14 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface AddTaskDialogProps {
   onAddTask: (task: any) => void;
 }
 
 export function AddTaskDialog({ onAddTask }: AddTaskDialogProps) {
+  const router = useRouter()
   const [open, setOpen] = React.useState(false);
   const [title, setTitle] = React.useState("");
   const [priority, setPriority] = React.useState("1");
@@ -57,6 +59,8 @@ export function AddTaskDialog({ onAddTask }: AddTaskDialogProps) {
     onAddTask(newTask);
     setOpen(false);
     resetForm();
+    router.refresh();
+    
   };
 
   const resetForm = () => {

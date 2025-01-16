@@ -41,6 +41,7 @@ import {
 import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu";
 import { EditTaskDialog } from "./edit-task";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export type Task = {
   id: number;
@@ -137,7 +138,8 @@ const columns: ColumnDef<Task>[] = [
   },
 ];
 
-export function TaskTable() {
+export function TaskTable( ) {
+  const router = useRouter()
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -167,7 +169,7 @@ export function TaskTable() {
     };
 
     fetchTasks();
-  }, []);
+  } , []);
 
   const handleEditClick = (task: Task) => {
     setSelectedTask(task);
@@ -194,6 +196,8 @@ export function TaskTable() {
     } catch (error) {
       console.error("Error updating task:", error);
       throw new Error("Failed to update task");
+    }finally{
+      router.refresh();
     }
   };
 
@@ -226,6 +230,7 @@ export function TaskTable() {
       toast.error('Failed to delete tasks');
     } finally {
       setIsDeleting(false);
+      router.refresh()
     }
   };
 

@@ -7,9 +7,11 @@ import { TaskTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 import { Fragment } from "react";
 import axios from "axios"
+import { useRouter } from "next/navigation";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const TaskList = () => {
+  const router = useRouter();
   const handleAddTask =async (newTask: object) => {
     try{
       console.log("New task:", newTask);
@@ -17,6 +19,8 @@ const TaskList = () => {
       console.log(response)
     }catch(e){
       console.log(e);
+    }finally{
+      router.refresh();
     }
   };
 
@@ -34,7 +38,7 @@ const TaskList = () => {
             </Button>
           </div>
         </div>
-        <TaskTable />
+        <TaskTable  />
       </div>
     </Fragment>
   );
